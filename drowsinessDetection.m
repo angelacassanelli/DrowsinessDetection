@@ -6,7 +6,10 @@ function drowsinessDetection(tresholdRatio, cam, videoPlayer)
     closedFrameCount = 0;
 
     while runLoop
-    
+
+        % use this if you want to visualize operations on frame 
+        pause (0.5)
+        
         % get the next frame
         frame = snapshot(cam);    
         step(videoPlayer, frame);
@@ -40,7 +43,8 @@ function drowsinessDetection(tresholdRatio, cam, videoPlayer)
                 beep
             end        
     
-        catch 
+        catch e
+            disp(e)
             disp('You are not detected');
         end
 

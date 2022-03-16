@@ -1,37 +1,62 @@
 function ratio = eyesDetection(frame, videoPlayer)
-    
-    % create face detector object
-    faceDetector = vision.CascadeObjectDetector();
 
-    % read the image
-    im1=frame;
-    imshow(im1);
+    imshow(frame)
+
+    %% eyes detection
+
+    disp ('starting face and eyes detection');
+
+    % create eyes detector Object and a box for it on the frame
+    eyeDetector =  vision.CascadeObjectDetector('EyePairBig');
+    eyesBox =step(eyeDetector, frame);    
     
-    % create eyes detector Object
-    EyeDetector =  vision.CascadeObjectDetector('EyePairBig');
-    
-    % Use EyeDetector on A and get the faces
-    EyeBBOX =step(EyeDetector,im1);     
-    
-    if (isempty(EyeBBOX))
+    %% checks for a correct detection
+
+    disp ('starting checks for correct detection');
+
+    if (isempty(eyesBox))
         return
     end
-    dim = size(EyeBBOX);
-    if (dim(1) > 1)
-        EyeBBOX = EyeBBOX(2,:); %to exclude nose from detection
+
+    % eyesBox are matrixes Mx4
+    % where M is the number of boxes for the M objects detected    
+    eyesBox_dim = size(eyesBox);
+    
+    % if M > 1, the detector has detected more than one object: this is wrong
+    % in this case we skip the current iteration    
+    if (eyesBox_dim(1) > 1)
+        eyesBox = eyesBox(2,:);
+        %return
     end
     
-    % Annotate these eyes on the top of the image
-    rectangle('Position',EyeBBOX,'LineWidth',3,'LineStyle','-','EdgeColor','g');
-    %imannotateeye = insertObjectAnnotation(im1,'rectangle',EyeBBOX,'Eye');
+    % draw eyes box on the frame    
+    rectangle('Position', eyesBox, 'LineWidth', 3, 'LineStyle', '-', 'EdgeColor', 'g');   
+
+    %% preprocessing 
     
     % Getting the last box and crop
-    imeye3 = imcrop(im1,EyeBBOX);
-    
+    im_eyes = imcrop(frame, eyesBox);
+    subplot(3,3,1), imshow(im_eyes);
+
+    % transform to gray scale
+    im_eyes_gray=rgb2gray(im_eyes);
+    subplot(3,3,2), imshow(im_eyes_gray);
+
+    % adjust image intensity values
+    im_eyes_adjusted = imadjust(im_eyes_gray);
+    subplot(3,3,3), imshow(im_eyes_adjusted);    
+
+    im_eyes_bw = imbinarize(im_eyes_adjusted, 'adaptive', 'ForegroundPolarity', 'dark', 'Sensitivity', 0.5);
+    subplot(3,3,4), imshow(im_eyes_bw);
+
+    %% eyes processing 
+
+    disp('starting processing');
+   
     % Process the image to bw, complement and strel
-    imeye4=im2bw(imeye3);
-    imeye5=imclose(imeye4, strel('sphere',4));
-    
+    imeye5 = imclose(im_eyes_bw, strel('sphere', 3));
+    subplot(3,3,5), imshow(imeye5);
+
     
     % The number of white pixels is simply the sum of all the image pixel values since each white pixel has value 1.
     % If the white pixels have value 255 then divide the sum by 255.

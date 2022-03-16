@@ -13,7 +13,8 @@ function treshold = getTreshold (firstFrame, videoPlayer)
             initialRatio = eyesDetection(firstFrame, videoPlayer);
             treshold = initialRatio*0.95;
             break
-        catch 
+        catch exception
+            disp (exception)
             disp('Person not detected.')
             if (i < 3)
                 disp('Try again.');

@@ -1,28 +1,29 @@
-function treshold = getTreshold (firstFrame, videoPlayer)    
+function treshold = getTreshold (cam, videoPlayer)    
 
-    for i= 1:3
+    % get the threshold through eye detection in the first frame
+    % loop while threshold is set
+    
+    i = 1;
+    
+    while true
 
-        % perform 3 attempts to set the treshold, else stop exection
-        % try to get the treshold through eye detection in the first frame
-        
         disp(['Attempt number ', num2str(i)]);
         disp('Open your eyes. Picture will be taken in 3 seconds.');
         pause(3);
                
         try
-            initialRatio = eyesDetection(firstFrame, videoPlayer);
-            treshold = initialRatio*0.95;
-            break
+            frame = snapshot(cam);
+            initialRatio = eyesDetection(frame, videoPlayer);
+            treshold = initialRatio*1.05;
+            return;
         catch exception
             disp (exception)
             disp('Person not detected.')
-            if (i < 3)
-                disp('Try again.');
-            else 
-                disp('Starting program. Default treshold will be used.');
-            end
+            disp('New attempt.');
             treshold = Constants.defaultTresholdRatio;
         end
+
+        i = i+1;
 
     end
 

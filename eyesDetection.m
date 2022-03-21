@@ -46,6 +46,7 @@ function ratio = eyesDetection(frame, videoPlayer)
     im_eyes_adjusted = imadjust(im_eyes_gray);
     subplot(3,3,3), imshow(im_eyes_adjusted);    
 
+    % process the image to bw
     im_eyes_bw = imbinarize(im_eyes_adjusted, 'adaptive', 'ForegroundPolarity', 'dark', 'Sensitivity', 0.5);
     subplot(3,3,4), imshow(im_eyes_bw);
 
@@ -53,17 +54,28 @@ function ratio = eyesDetection(frame, videoPlayer)
 
     disp('starting processing');
    
-    % Process the image to bw, complement and strel
-    imeye5 = imclose(im_eyes_bw, strel('sphere', 3));
-    subplot(3,3,5), imshow(imeye5);
+    % complement the image
+    im_eyes_complement = imcomplement(im_eyes_bw);
+    subplot(3,3,5), imshow(im_eyes_complement);
 
+    % erode image
+    im_eyes_erode = imerode(im_eyes_complement, strel('disk', 3));
+    subplot(3,3,6), imshow(im_eyes_erode);
+
+    % erode image
+    im_eyes_erode2 = imerode(im_eyes_complement, strel('disk', 3));
+    subplot(3,3,7), imshow(im_eyes_erode2);
     
-    % The number of white pixels is simply the sum of all the image pixel values since each white pixel has value 1.
-    % If the white pixels have value 255 then divide the sum by 255.
-    numberOfWhitePixels = sum(imeye5);
+    % the number of white pixels is simply the sum of all the image pixel values since each white pixel has value 1.
+    % if the white pixels have value 255 then divide the sum by 255.
+    numberOfWhitePixels = sum(im_eyes_erode);
     % The number of black pixels is simply the total number of pixels in the image minus the number of white pixels.
-    numberOfBlackPixels = numel(imeye5) - numberOfWhitePixels ;
-    % Now calculate the ratio.
-    ratio = numberOfBlackPixels  / numberOfWhitePixels;
+    numberOfBlackPixels = numel(im_eyes_erode) - numberOfWhitePixels ;
+
+    % calculate the ratio
+    ratio = numberOfBlackPixels/numberOfWhitePixels;
+
+    % normalize values
+    ratio = ratio/1e2;
 
 end

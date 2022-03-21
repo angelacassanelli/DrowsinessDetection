@@ -31,7 +31,7 @@ else
         case 'y'
             tresholdRatio = Constants.defaultTresholdRatio;
         otherwise
-            tresholdRatio = getTreshold(firstFrame, videoPlayer);
+            tresholdRatio = getTreshold(cam, videoPlayer);
     end
 
     % start drowsiness detection algorithm

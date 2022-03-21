@@ -7,7 +7,7 @@ function drowsinessDetection(tresholdRatio, cam, videoPlayer)
 
     while runLoop
 
-        % use this if you want to visualize operations on frame 
+        % reduce the frame rate 
         pause (0.5)
         
         % get the next frame
@@ -16,6 +16,7 @@ function drowsinessDetection(tresholdRatio, cam, videoPlayer)
 
         % try to detect eyes state
         try
+
             % detect the eyes in the frame and keep comparing the ratio with the threshold
             ratio = eyesDetection(frame, videoPlayer);
             disp(['ratio is ',num2str(ratio, 3)]);
@@ -23,7 +24,7 @@ function drowsinessDetection(tresholdRatio, cam, videoPlayer)
                 
             previousEyeStatus = eyeStatus;
  
-            if ratio > tresholdRatio  
+            if ratio < tresholdRatio  
                 eyeStatus = Constants.eyesStatusOpen;
             else
                 eyeStatus= Constants.eyesStatusClosed;
@@ -35,17 +36,18 @@ function drowsinessDetection(tresholdRatio, cam, videoPlayer)
                     closedFrameCount = 0;
             end
 
-            disp(['Eyes are ', eyeStatus]);                       
+            disp(['EYES ARE ', eyeStatus]);                       
             
             % signal drowsiness if eyes are closed for more than 3 consecutive frames
-            if (closedFrameCount > 5)
+            if (closedFrameCount >= 2)
                 disp ('!!! !!! !!! DROWSINESS DETECTED !!! !!! !!!');
                 beep
             end        
     
-        catch e
-            disp(e)
-            disp('You are not detected');
+        catch 
+
+            disp('Your eyes are not correctly detected');
+            
         end
 
         % check if the video player window has been closed

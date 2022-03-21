@@ -1,4 +1,6 @@
-function treshold = getTreshold (cam, videoPlayer)    
+% function for calculating the initial threshold 
+
+function treshold = getTreshold (cam)    
 
     % get the threshold through eye detection in the first frame
     % loop while threshold is set
@@ -13,8 +15,8 @@ function treshold = getTreshold (cam, videoPlayer)
                
         try
             frame = snapshot(cam);
-            initialRatio = eyesDetection(frame, videoPlayer);
-            treshold = initialRatio*1.05;
+            initialRatio = eyesDetection(frame);
+            treshold = initialRatio*0.85;
             return;
         catch exception
             disp (exception)

@@ -1,3 +1,5 @@
+% function for drowsiness detection based on eyes detection
+
 function drowsinessDetection(tresholdRatio, cam, videoPlayer)
     
     % initialize variables
@@ -7,8 +9,8 @@ function drowsinessDetection(tresholdRatio, cam, videoPlayer)
 
     while runLoop
 
-        % reduce the frame rate 
-        pause (0.5)
+        % force reduce the frame rate 
+        pause (0.25)
         
         % get the next frame
         frame = snapshot(cam);    
@@ -17,45 +19,51 @@ function drowsinessDetection(tresholdRatio, cam, videoPlayer)
         % try to detect eyes state
         try
 
-            % detect the eyes in the frame and keep comparing the ratio with the threshold
-            ratio = eyesDetection(frame, videoPlayer);
-            disp(['ratio is ',num2str(ratio, 3)]);
-            disp(['threshold ratio is ',num2str(tresholdRatio,3)])
+            % detect the eyes in the frame and compare the current ratio with the threshold
+            ratio = eyesDetection(frame);
+            disp(['ratio is ', num2str(ratio, 3)]);
+            disp(['threshold ratio is ', num2str(tresholdRatio,3)])
                 
+            % save previous value for eye status
             previousEyeStatus = eyeStatus;
  
-            if ratio < tresholdRatio  
+            % set current value for eye status
+            if ratio >= tresholdRatio  
                 eyeStatus = Constants.eyesStatusOpen;
             else
                 eyeStatus= Constants.eyesStatusClosed;
             end
 
+            % compare previous and current values for eye status
             if strcmp(eyeStatus, Constants.eyesStatusClosed) && strcmp(eyeStatus, previousEyeStatus)
+                % count consecutive frames with closed eyes
                 closedFrameCount = closedFrameCount + 1;
             else
-                    closedFrameCount = 0;
+                % reset count
+                closedFrameCount = 0;
             end
 
-            disp(['EYES ARE ', eyeStatus]);                       
+            subplot(3,3, 9); imshow([Constants.folderPath, eyeStatus, Constants.extension]);
+            disp(['EYES ARE ', eyeStatus]); 
             
-            % signal drowsiness if eyes are closed for more than 3 consecutive frames
-            if (closedFrameCount >= 2)
+            % signal drowsiness if eyes are closed for more than 2 consecutive frames
+            if (closedFrameCount > 2)
                 disp ('!!! !!! !!! DROWSINESS DETECTED !!! !!! !!!');
                 beep
             end        
     
         catch 
 
+            % catch exception
             disp('Your eyes are not correctly detected');
             
         end
 
-        % check if the video player window has been closed
-        % if yes, stop execution
+        % if the video player window has been closed exit loop
         runLoop = isOpen(videoPlayer);         
     
     end    
         
  end
 
-    
+ 

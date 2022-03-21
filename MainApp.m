@@ -1,4 +1,4 @@
-%% Main App
+% MAIN APP
 
 % check if webcam is available
 webcamList = webcamlist;
@@ -10,6 +10,7 @@ if (isempty(webcamList))
 
 % if yes start execution
 else 
+
     % select first webcam in available webcam list
     currentWebcam = webcamList{1};
     disp(['Webcam available:', currentWebcam]);
@@ -31,7 +32,7 @@ else
         case 'y'
             tresholdRatio = Constants.defaultTresholdRatio;
         otherwise
-            tresholdRatio = getTreshold(cam, videoPlayer);
+            tresholdRatio = getTreshold(cam);
     end
 
     % start drowsiness detection algorithm
@@ -39,4 +40,4 @@ else
 
 end
 
-% cleanUp(videoPlayer);
+%cleanUp(videoPlayer);

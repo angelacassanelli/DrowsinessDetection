@@ -16,10 +16,9 @@ function treshold = getTreshold (cam)
         try
             frame = snapshot(cam);
             initialRatio = eyesDetection(frame);
-            treshold = initialRatio*0.85;
+            treshold = initialRatio*0.8;
             return;
-        catch exception
-            disp (exception)
+        catch 
             disp('Person not detected.')
             disp('New attempt.');
             treshold = Constants.defaultTresholdRatio;

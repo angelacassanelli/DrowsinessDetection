@@ -43,7 +43,7 @@ function drowsinessDetection(tresholdRatio, cam, videoPlayer)
                 closedFrameCount = 0;
             end
 
-            subplot(3,3, 9); imshow([Constants.folderPath, eyeStatus, Constants.extension]);
+            subplot(3,3,8); imshow([Constants.folderPath, eyeStatus, Constants.extension]);
             disp(['EYES ARE ', eyeStatus]); 
             
             % signal drowsiness if eyes are closed for more than 2 consecutive frames
@@ -54,7 +54,6 @@ function drowsinessDetection(tresholdRatio, cam, videoPlayer)
     
         catch 
 
-            % catch exception
             disp('Your eyes are not correctly detected');
             
         end

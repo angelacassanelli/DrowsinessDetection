@@ -3,7 +3,7 @@
 function ratio = eyesDetection(frame)
 
     imshow(frame)
-    subplot(3,3,1), imshow(frame)
+    subplot(3,3,9), imshow(frame)
 
     % 1. eyes detection
 
@@ -12,9 +12,7 @@ function ratio = eyesDetection(frame)
     % create eyes detector object and a box for it on the frame
     eyeDetector =  vision.CascadeObjectDetector('EyePairBig');
     eyesBox = step(eyeDetector, frame);
-    
-%     IFaces = insertObjectAnnotation(frame, 'rectangle', eyesBox, 'Face');    
-    
+        
     % 2. checks for a correct detection
 
     disp ('starting checks for correct detection');
@@ -30,7 +28,6 @@ function ratio = eyesDetection(frame)
     % if M > 1, the detector has detected more than one object: this is wrong
     % in this case we skip the current iteration    
     if (eyesBox_dim(1) > 1)
-        %eyesBox = eyesBox(2,:);
         return
     end
     
@@ -41,19 +38,19 @@ function ratio = eyesDetection(frame)
     
     % Getting the last box and crop
     im_eyes = imcrop(frame, eyesBox);
-    subplot(3,3,2), imshow(im_eyes);
+    subplot(3,3,1), imshow(im_eyes);
 
     % transform to gray scale
     im_eyes_gray=rgb2gray(im_eyes);
-    subplot(3,3,3), imshow(im_eyes_gray);
+    subplot(3,3,2), imshow(im_eyes_gray);
 
     % adjust image intensity values
     im_eyes_adjusted = imadjust(im_eyes_gray);
-    subplot(3,3,4), imshow(im_eyes_adjusted);    
+    subplot(3,3,3), imshow(im_eyes_adjusted);    
 
     % process the image to bw
     im_eyes_bw = imbinarize(im_eyes_adjusted, 'adaptive', 'ForegroundPolarity', 'dark', 'Sensitivity', 0.5);
-    subplot(3,3,5), imshow(im_eyes_bw);
+    subplot(3,3,4), imshow(im_eyes_bw);
 
     % 4. eyes processing 
 
@@ -61,15 +58,15 @@ function ratio = eyesDetection(frame)
    
     % complement the image
     im_eyes_complement = imcomplement(im_eyes_bw);
-    subplot(3,3,6), imshow(im_eyes_complement);
+    subplot(3,3,5), imshow(im_eyes_complement);
 
     % morphologically close image
     im_eyes_close = imclose(im_eyes_complement, strel('disk', 2));
-    subplot(3,3,7), imshow(im_eyes_close);
+    subplot(3,3,6), imshow(im_eyes_close);
 
     % morphologically open image
-    im_eyes_open = imopen(im_eyes_close, strel('disk', 8));
-    subplot(3,3,8), imshow(im_eyes_open);
+    im_eyes_open = imopen(im_eyes_close, strel('disk', 7));
+    subplot(3,3,7), imshow(im_eyes_open);
     
     % each white pixel has value 1
     whitePixels = sum(im_eyes_open == 1);

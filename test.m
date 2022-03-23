@@ -72,19 +72,19 @@ im_eyes_close = imclose(im_eyes_complement, strel('disk', 2));
 subplot(3,3,6), imshow(im_eyes_close);
 
 % open image
-im_eyes_open = imopen(im_eyes_close, strel('disk', 8));
+im_eyes_open = imopen(im_eyes_close, strel('disk', 7));
 subplot(3,3,7), imshow(im_eyes_open);
 
 % the number of white pixels is simply the sum of all the image pixel values since each white pixel has value 1.
 % if the white pixels have value 255 then divide the sum by 255.
 whitePixels = sum(im_eyes_open==1);
-numberOfWhitePixels = sum(whitePixels)
+numberOfWhitePixels = sum(whitePixels);
 % The number of black pixels is simply the total number of pixels in the image minus the number of white pixels.
 blackPixels = numel(im_eyes_open) - numberOfWhitePixels ;
-numberOfBlackPixels = sum(blackPixels)
+numberOfBlackPixels = sum(blackPixels);
 
 % calculate the ratio
-ratio = numberOfWhitePixels/numberOfBlackPixels;
+ratio = numberOfWhitePixels/numberOfBlackPixels
 
 % normalize values
-ratio = ratio;
+thresholdratio = ratio*0.8

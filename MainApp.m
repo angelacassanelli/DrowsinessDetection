@@ -24,7 +24,7 @@ else
     frameSize = size(firstFrame);
     
     % create the video player object with first fram size
-    videoPlayer = vision.VideoPlayer('Name', 'DROWSINESS DETECTION APP - VIDEO PREVIEW', 'Position', [0, 100, frameSize(2)/1.5, frameSize(1)/1.5]);
+    videoPlayer = vision.VideoPlayer('Name', 'DROWSINESS DETECTION APP - VIDEO PREVIEW', 'Position', [0, 500, frameSize(2)/1.5, frameSize(1)/1.5]);
     
     % get treshold for matching method
     answer = input('Do you want to use default treshold ratio? [y,n] ', 's');
@@ -40,4 +40,4 @@ else
 
 end
 
-%cleanUp(videoPlayer);
+cleanUp(videoPlayer);

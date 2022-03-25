@@ -10,7 +10,7 @@ function drowsinessDetection(tresholdRatio, cam, videoPlayer)
     while runLoop
 
         % force reduce the frame rate 
-        pause (0.25)
+        pause (0.30)
         
         % get the next frame
         frame = snapshot(cam);    
@@ -49,7 +49,7 @@ function drowsinessDetection(tresholdRatio, cam, videoPlayer)
             % signal drowsiness if eyes are closed for more than 2 consecutive frames
             if (closedFrameCount > 2)
                 disp ('!!! !!! !!! DROWSINESS DETECTED !!! !!! !!!');
-                beep
+                beep;
             end        
     
         catch 

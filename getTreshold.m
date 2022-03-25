@@ -17,11 +17,12 @@ function treshold = getTreshold (cam)
             frame = snapshot(cam);
             initialRatio = eyesDetection(frame);
             treshold = initialRatio*0.8;
-            return;
+            if (treshold > 0)
+                return;
+            end
         catch 
-            disp('Person not detected.')
+            disp('Person not detected.');
             disp('New attempt.');
-            treshold = Constants.defaultTresholdRatio;
         end
 
         i = i+1;

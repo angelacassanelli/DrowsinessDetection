@@ -5,8 +5,8 @@ webcamList = webcamlist;
 
 % if not notify user and stop execution 
 if (isempty(webcamList))
-    disp('No webcam available. Stop program.')
-    return
+    disp('No webcam available. Stop program.');
+    return;
 
 % if yes start execution
 else 
@@ -27,13 +27,7 @@ else
     videoPlayer = vision.VideoPlayer('Name', 'DROWSINESS DETECTION APP - VIDEO PREVIEW', 'Position', [0, 500, frameSize(2)/1.5, frameSize(1)/1.5]);
     
     % get treshold for matching method
-    answer = input('Do you want to use default treshold ratio? [y,n] ', 's');
-    switch answer
-        case 'y'
-            tresholdRatio = Constants.defaultTresholdRatio;
-        otherwise
-            tresholdRatio = getTreshold(cam);
-    end
+    tresholdRatio = getTreshold(cam);
 
     % start drowsiness detection algorithm
     drowsinessDetection(tresholdRatio, cam, videoPlayer);    

@@ -2,12 +2,12 @@
 
 function ratio = eyesDetection(frame)
 
-    imshow(frame)
-    subplot(3,3,9), imshow(frame)
+    imshow(frame);
+    subplot(3,3,9), imshow(frame);
 
     % 1. eyes detection
 
-    disp ('starting face and eyes detection');
+    disp ('starting eyes detection');
 
     % create eyes detector object and a box for it on the frame
     eyeDetector =  vision.CascadeObjectDetector('EyePairBig');
@@ -17,8 +17,9 @@ function ratio = eyesDetection(frame)
 
     disp ('starting checks for correct detection');
 
+    % eyesBox should contain something
     if (isempty(eyesBox))
-        return
+        return;
     end
 
     % eyesBox are matrixes Mx4
@@ -28,7 +29,7 @@ function ratio = eyesDetection(frame)
     % if M > 1, the detector has detected more than one object: this is wrong
     % in this case we skip the current iteration    
     if (eyesBox_dim(1) > 1)
-        return
+        return;
     end
     
     % draw eyes box on the frame    
@@ -36,7 +37,7 @@ function ratio = eyesDetection(frame)
 
     % 3. preprocessing 
     
-    % Getting the last box and crop
+    % getting the last box and crop
     im_eyes = imcrop(frame, eyesBox);
     subplot(3,3,1), imshow(im_eyes);
 

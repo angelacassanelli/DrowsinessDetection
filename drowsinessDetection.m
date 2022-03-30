@@ -10,7 +10,7 @@ function drowsinessDetection(tresholdRatio, cam, videoPlayer)
     while runLoop
 
         % force reduce the frame rate 
-        pause (0.30)
+        pause (0.30);
         
         % get the next frame
         frame = snapshot(cam);    
@@ -22,7 +22,7 @@ function drowsinessDetection(tresholdRatio, cam, videoPlayer)
             % detect the eyes in the frame and compare the current ratio with the threshold
             ratio = eyesDetection(frame);
             disp(['ratio is ', num2str(ratio, 3)]);
-            disp(['threshold ratio is ', num2str(tresholdRatio,3)])
+            disp(['threshold ratio is ', num2str(tresholdRatio,3)]);
                 
             % save previous value for eye status
             previousEyeStatus = eyeStatus;

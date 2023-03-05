@@ -1,7 +1,7 @@
 
 # Drowsiness Detection
 
-MATLAB implementation of a drowsiness detection system
+MATLAB implementation of a Drowsiness Detection system
 
 
 ## About the project
